@@ -53,7 +53,7 @@ const Home = () => {
               w="100%"
               borderRadius="xl"
               mb={2}
-              d="inline-block"
+              display="inline-block"
               src={`https://itp.nyu.edu/${project.image}`}
               alt="Alt"
             />
