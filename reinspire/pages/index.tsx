@@ -6,20 +6,6 @@ import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export async function getStaticProps() {
-  const response = await fetch(
-    `https://itp.nyu.edu/projects/public/projectsJSON_ALL.php?venue_id=183`,
-    {
-      method: "GET",
-    }
-  );
-
-  const projects = await response.json();
-  return {
-    props: { projects: projects }, // will be passed to the page component as props
-    revalidate: 360, // 1 hour
-  };
-}
 type Props = {
   projects: any[];
 };
