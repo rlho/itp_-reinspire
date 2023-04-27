@@ -5,33 +5,24 @@ import styles from "@/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
-    useEffect(() => {
-    console.log("useEffect");
-    const player = new Player("handstick");
+export async function getStaticProps() {
+  const response = await fetch(
+    `https://itp.nyu.edu/projects/public/projectsJSON_ALL.php?venue_id=183`,
+    {
+      method: "GET",
+    }
+  );
 
-    const onPlay = function () {
-      player
-        .enableTextTrack("en")
-        .then(function (track) {
-          console.log(track);
-        })
-        .catch(function (error) {
-          switch (error.name) {
-            case "InvalidTrackLanguageError":
-              // no track was available with the specified language
-              break;
-
-            case "InvalidTrackError":
-              // no track was available with the specified language and kind
-              break;
-
-            default:
-              // some other error occurred
-              break;
-          }
-        });
-    };
+  const projects = await response.json();
+  return {
+    props: { projects: projects }, // will be passed to the page component as props
+    revalidate: 360, // 1 hour
+  };
+}
+type Props = {
+  projects: any[];
+};
+export default function Home(projects: any[]) {
   return (
     <>
       <Head>
@@ -40,7 +31,16 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}></main>
+      <main className={styles.main}>
+        {projects.map((project, i) => {
+          return (
+            <div key={i}>
+              <div>{project.project_name}</div>
+              <img src={`https://${project.image}`} />
+            </div>
+          );
+        })}
+      </main>
     </>
   );
 }
