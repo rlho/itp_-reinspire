@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,20 @@ export async function getStaticProps() {
 type Props = {
   projects: any[];
 };
-export default function Home(projects: any[]) {
+export default function Home() {
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `https://itp.nyu.edu/projects/public/projectsJSON_ALL.php?venue_id=183`,
+        {
+          method: "GET",
+        }
+      );
+      const pjs = await response.json();
+      setProjects(pjs);
+    };
+  }, []);
   return (
     <>
       <Head>
@@ -32,7 +46,7 @@ export default function Home(projects: any[]) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {projects.map((project, i) => {
+        {projects.map((project: any, i) => {
           return (
             <div key={i}>
               <div>{project.project_name}</div>
