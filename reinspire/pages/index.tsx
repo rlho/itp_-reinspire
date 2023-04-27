@@ -22,6 +22,7 @@ export default function Home() {
       const pjs = await response.json();
       setProjects(pjs);
     };
+    fetchData();
   }, []);
   return (
     <>
